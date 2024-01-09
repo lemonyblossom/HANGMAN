@@ -1,21 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&family=Bungee+Spice&family=Press+Start+2P&family=Rubik+Bubbles&family=Rubik+Mono+One&family=VT323&family=Varela+Round&display=swap" rel="stylesheet">
     <title>HangBear</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 
 <body>
     <header>
+        <p id="todaysDate"></p>
         <h1>HANGBEAR</h1>
-        
     </header>
     <main>
-        <p id="todaysDate"></p>
+        <section class="scoreCount">
+        <div id="winCount">Wins: 0</div>
+        <div id="lossCount">Losses: 0</div>
+        </section>
    
         <article id="instructions">
             <h2>Let's play!</h2>
@@ -27,30 +32,16 @@
             <button class="btn" type="button" id="startGameBtn">Start<br>Game</button>
             <br><br> <h2> You have 6 lives</h2>
         </article>
-
   
-        
         <img id="hangman" src="images/h0.png" alt="hangman">
-        
-
         <img id="winnerBear" src="images/winnerBear.png" alt="winner">
 
-
-        
         <section id="gameBoard">
           
             <section id="letterBoxes">
-                <!-- This is where the matched letters should appear, these should match the number of letters in the selected word -->
                 <ul>
-                  <!--  <li><input type="text" disabled value="" /></li>
-                    <li><input type="text" disabled value="" /></li>
-                    <li><input type="text" disabled value="" /></li>
-                    <li><input type="text" disabled value="" /></li>
-                    <li><input type="text" disabled value=""  /></li>
-                    <li><input type="text" disabled value=""  /></li>-->
-                   
                 </ul>
-                <h3 class =></h3>
+                
             </section>
             <ul id="letterButtons">
                 <li><button class="btn btn--stripe" type="button" value="Q">Q</button></li>
@@ -62,7 +53,7 @@
                 <li><button class="btn btn--stripe" type="button" value="U">U</button></li>
                 <li><button class="btn btn--stripe" type="button" value="I">I</button></li>
                 <li><button class="btn btn--stripe" type="button" value="O">O</button></li>
-                <li><button class="btn btn--stripe span-2" type="button" value="P">P</button></li>
+                <li><button class="btn btn--stripe" type="button" value="P">P</button></li>
                 <li><button class="btn btn--stripe" type="button" value="A">A</button></li>
                 <li><button class="btn btn--stripe" type="button" value="S">S</button></li>
                 <li><button class="btn btn--stripe" type="button" value="D">D</button></li>
@@ -72,7 +63,7 @@
                 <li><button class="btn btn--stripe" type="button" value="J">J</button></li>
                 <li><button class="btn btn--stripe" type="button" value="K">K</button></li>
                 <li><button class="btn btn--stripe" type="button" value="L">L</button></li>
-                <li><button class="btn btn--stripe span-2" type="button" value="Z">Z</button></li>
+                <li><button class="btn btn--stripe" type="button" value="Z">Z</button></li>
                 <li><button class="btn btn--stripe" type="button" value="X">X</button></li>
                 <li><button class="btn btn--stripe" type="button" value="C">C</button></li>
                 <li><button class="btn btn--stripe" type="button" value="V">V</button></li>
@@ -82,13 +73,13 @@
               </ul>
             <section id="message"> 
                 <br><br>
-                <button id="restart">Restart</button>
+                <button id="restart"><h2>Restart</h2></button>
             </section>
         </section>
        
     </main>
     <footer>
-       <a href="https://github.com/chas-academy/u03-js-hangman-lemonyblossom"> <h3>Chas Academy - Hangman</h3> <br> Emma Jensen - lemonyblossom </a>
+       <a href="https://github.com/chas-academy/u03-js-hangman-lemonyblossom"> <h3>Chas Academy - Hangman U03</h3> <br> Emma Jensen - lemonyblossom </a>
     </footer>
     <script type="text/javascript" src="js/script.js"></script>
 </body>

@@ -1,115 +1,114 @@
-// Array with gameWords
+//gameWords in  wordList in alphabetical order
 const wordList = [
-	"SUNSHINE",
-	"BUTTERFLY",
 	"ADVENTURE",
-	"BEAUTIFUL",
-	"DELICIOUS",
-	"SUNSHINE",
-	"LAVENDER",
-	"GARDENING",
-	"FANTASTIC",
 	"ADVENTURE",
-	"COLORFUL",
-	"DREAMING",
-	"HAPPINESS",
-	"DELIGHTED",
-	"ENERGETIC",
-	"GRACEFUL",
-	"BEAUTIFUL",
-	"SENSITIVE",
-	"LANDSCAPE",
-	"BUTTERFLY",
-	"CHARMING",
 	"ALLIGATOR",
-	"CHOCOLATE",
-	"BRILLIANT",
 	"ATTENTION",
-	"FRAGRANCE",
-	"IMPORTANT",
-	"KNOWLEDGE",
-	"MELLOW",
-	"JACKET",
-	"PUDDLE",
-	"GUITAR",
+	"BEAUTIFUL",
+	"BEAUTIFUL",
+	"BRILLIANT",
 	"BREEZE",
-	"DINNER",
-	"GLOVES",
-	"FAMILY",
-	"WIZARD",
-	"FLIGHT",
-	"SQUARE",
+	"BREEZY",
+	"BUTTERFLY",
+	"BUTTERFLY",
 	"CARPET",
+	"CHARMING",
+	"CHOCOLATE",
 	"CIRCLE",
-	"JUNGLE",
-	"SPIRAL",
-	"RATTLE",
-	"MARBLE",
-	"TENDER",
-	"YELLOW",
-	"WEATHER",
 	"CLIMATE",
+	"CLOUDY",
+	"COLORFUL",
+	"DELICIOUS",
+	"DELIGHTED",
+	"DINNER",
+	"DREAMING",
+	"ENERGETIC",
+	"FAMILY",
+	"FANTASTIC",
+	"FLIGHT",
+	"FREEZER",
+	"FRAGRANCE",
+	"GALAXY",
+	"GARDENING",
+	"GLOVES",
+	"GRACEFUL",
+	"GUITAR",
+	"HAPPINESS",
+	"HUMIDITY",
+	"IMPORTANT",
+	"JACKET",
+	"JAZZ",
+	"JUNGLE",
+	"KNOWLEDGE",
+	"LANDSCAPE",
+	"LAVENDER",
+	"MARBLE",
+	"MELLOW",
+	"PIXEL",
+	"PUDDLE",
+	"PUZZLE",
+	"POTION",
+	"QUIRK",
+	"RAINBOW",
+	"RATTLE",
+	"RITUAL",
+	"SENSITIVE",
+	"SQUARE",
+	"SPIRAL",
+	"STORMY",
+	"SQUARE",
 	"SUNRISE",
 	"SUNSET",
-	"RAINBOW",
-	"CLOUDY",
-	"BREEZY",
-	"STORMY",
-	"FREEZER",
-	"HUMIDITY",
-	"JAZZ",
-	"PUZZLE",
-	"QUIRK",
-	"PIXEL",
-	"POTION",
-	"WIZARD",
-	"RITUAL",
-	"GALAXY",
+	"SUNSHINE",
+	"SUNSHINE",
+	"TENDER",
 	"VOODOO",
+	"WEATHER",
+	"WIZARD",
+	"WIZARD",
+	"YELLOW",
 	"ZIGZAG",
 ];
 
 // Globala variabler
-let gameWord; // Sträng: ett av orden valt av en slumpgenerator från arrayen ovan
-
-let guesses = 0;
-let remainingLives = 6;
-let hangmanImg = document.querySelector(`#hangman`); // Sträng: sökväg till bild som kommer visas (och ändras) fel svar. t.ex. `/images/h1.png`
-
-let msgHolderEl = document.querySelector("#message"); // DOM-nod: Ger meddelande när spelet är över
-let startGameBtnEl = document.querySelector("#startGameBtn"); // DOM-nod: knappen som du startar spelet med
-let letterButtonEls = document.querySelector("#letterButtons"); // Array av DOM-noder: Knapparna för bokstäverna
-let letterBoxEls = document.querySelector("#letterBoxes > ul"); // Array av DOM-noder: Rutorna där bokstäverna ska stå
-let restartBtn = document.querySelector("#restart");
-let instructions = document.querySelector("#instructions");
-let gameBoard = document.querySelector("#gameBoard");
 let createLivesDisplay = document.createElement("div");
+let gameBoard = document.querySelector("#gameBoard");
+let gameWord; // the chosen word for the player to guess
+let guesses = 0;
+let hangmanImg = document.querySelector(`#hangman`); // Sträng: sökväg till bild som kommer visas (och ändras) fel svar. t.ex. `/images/h1.png`
+let instructions = document.querySelector("#instructions");
+let letterBoxEls = document.querySelector("#letterBoxes > ul"); // Array av DOM-noder: Rutorna där bokstäverna ska stå
+let letterButtonEls = document.querySelector("#letterButtons"); // Array av DOM-noder: Knapparna för bokstäverna
+let msgHolderEl = document.querySelector("#message"); // DOM-nod: Ger meddelande när spelet är över
+let remainingLives = 6;
+let restartBtn = document.querySelector("#restart");
+let scoreCount = document.querySelector(".scoreCount");
+let startGameBtnEl = document.querySelector("#startGameBtn"); // DOM-nod: knappen som du startar spelet med
 let winnerBear = document.getElementById("winnerBear");
+let wins = 0;
+let losses = 0;
 
-//eventlisteners
-letterButtonEls.addEventListener("click", handleButtonClick);
+// Event listener for startGame
 startGameBtnEl.addEventListener("click", () => {
 	setTimeout(() => {
 		startGame();
 	}, 400);
 });
-//for restart button
-restartBtn.addEventListener("click", restartGame);
 
-//button to restart
-/* restartBtn.addEventListener('click', function() {
-   restartGame();
-   resetButtons();//problem! makes hearts decrease x2/x3/x4 after restart
-   startGame();
- }); */
+// Eventlistener on restart
+restartBtn.addEventListener("click", function () {
+	resetButtons();
+	restartGame();
+});
 
-//How elements display when page is loaded.
+// Initial display
 letterButtonEls.style.display = "none";
 msgHolderEl.style.display = "none";
 gameBoard.display = "";
 hangmanImg.style.display = "none";
 winnerBear.style.display = "none";
 gameBoard.style.visibility = "hidden";
+scoreCount.style.display = "none";
 
 //Todays date and time
 const today = new Date();
@@ -122,17 +121,12 @@ const options = {
 	minute: "numeric",
 	hour12: false,
 };
-const todaysDate = today.toLocaleDateString("en-US", options);
-document.getElementById("todaysDate").innerHTML = todaysDate;
+
+const formattedDate = today.toLocaleDateString("en-US", options);
+document.getElementById("todaysDate").innerHTML = formattedDate;
 
 // Starting the game by choosing an element from the array wordList and creating letterboxes where the word will be displayed later.
 function startGame() {
-	/* const letterButtonsContainer = document.getElementById('letterButtons');
-   if (!letterButtonsContainer) {
-      console.error('Element with ID "letterButtons" not found.');
-      return;
-   } */
-	lives(gameBoard, remainingLives);
 	animateLetterButtons();
 	generateGameplay();
 	createLetterBoxes(gameWord);
@@ -141,42 +135,30 @@ function startGame() {
 	instructions.style.display = "none";
 	hangmanImg.style.display = "";
 	gameBoard.style.visibility = "visible";
+	scoreCount.style.display = "";
+	lives(gameBoard, remainingLives);
 	document.body.style.backgroundColor = "#6a00ff";
+	animateLetterButtons();
+	letterButtonEls.addEventListener("click", handleButtonClick);
 
 	console.log(gameWord);
-
-	// Calls animateLetterButtons function to animate letterButtons
-	animateLetterButtons();
 }
 
 //displays all letterbutton buttons one by one when startGame
 function animateLetterButtons() {
 	const letterButtonBtn = document.getElementById("letterButtons");
-	if (!letterButtonBtn) {
-		console.log("hittar inga letterbuttons");
-		return;
-	}
-
 	const letterButtonsItem = letterButtonBtn.querySelectorAll("button");
 
-	letterButtonsItem.forEach((item, i) => {
+	letterButtonsItem.forEach((item, index) => {
 		setTimeout(() => {
 			item.classList.add("show");
-		}, i * 100); // time for delay 100ms
+		}, index * 100); // time for delay 100ms
 	});
 }
 
-/* function handleButtonClick(event) {
+function handleButtonClick(event) {
 	disabled(event);
 	letterguess(event);
-} */ //trying out function below
-
-function handleButtonClick(event) {
-	const button = event.target.closest("button");
-	if (button) {
-		disabled(event);
-		letterguess(event);
-	}
 }
 
 // Picks a number randombly and forces it to an int and display the word from array =t o that int.
@@ -190,7 +172,6 @@ function createLetterBoxes(gameWord) {
 		let newLetterBox = document.createElement("li");
 		let newLetterBoxInput = document.createElement("input");
 		const letter = gameWord[i];
-		console.log(letter);
 
 		newLetterBoxInput.setAttribute("disabled", true);
 		letterBoxEls.appendChild(newLetterBox);
@@ -202,8 +183,8 @@ function createLetterBoxes(gameWord) {
 //Disable buttons
 function disabled(event) {
 	event.target.disabled = true;
-	console.log(event);
-	console.log(event.target);
+	/* console.log(event);
+	console.log(event.target); */
 }
 
 function lives(livesDisplay, remainingLives) {
@@ -218,6 +199,8 @@ function lives(livesDisplay, remainingLives) {
 		//Style
 		Object.assign(livesImg.style, {
 			width: "6vmin",
+			maxWidth: "80px",
+			maxHeight: "80px",
 		});
 	}
 	// updates livesDisplay before (beforebegin) the og livesDisplay
@@ -240,15 +223,13 @@ function letterguess(event) {
 
 		//if gameWord contains the button value:
 		if (guessedLetter === letter) {
-			console.log("Rätt gissat!" + guessedLetter);
-
-			//style
-			clickedBtn.style.border = "solid thin green";
-			clickedBtn.style.color = "#00ff77";
-
+			console.log("Correct guess: " + guessedLetter);
 			//Display letter in letterBox
 			letterBoxInputs[i].value = guessedLetter;
 			correctGuess = true;
+
+			//style
+			clickedBtn.style.border = "0.4vmin outset #b3a7ff";
 
 			//check if game is won
 			gameWinner();
@@ -257,33 +238,50 @@ function letterguess(event) {
 
 	// if gameWord does not contain the guessed letter
 	if (!correctGuess) {
-		console.log("fel gissat:" + guessedLetter);
+		console.log("Wrong guess: " + guessedLetter);
 
 		//style
-		clickedBtn.style.border = "solid thin red";
-		clickedBtn.style.color = "red";
+		clickedBtn.style.border = "0.4vmin outset #ff0000";
+		clickedBtn.style.color = "#ff0000";
 
 		//update how many lives rremain
 		guesses++;
 		remainingLives--;
 		console.log("lives left: " + remainingLives);
-		console.log("wrong guesses:" + guesses);
 
-		//update hangmanImg
+		//update hangmanImg to match img to number of wrong guess
 		hangmanImg.src = `images/h${guesses}.png`;
 		lives(gameBoard, remainingLives);
 
-		//check if player is out of lives(guessed wrong 6 times), then over.
+		//check if game is over (on guessed wrong 6 times).
 		if (guesses >= 6) {
 			gameOver();
 		}
 	}
 }
+let hasWon = false;
+
+//TODO function for counting wins and losses
+//losses
+function displayLoseCount() {
+	document.getElementById("lossCount").textContent = "Losses: " + losses;
+}
+//wins
+function displayWinCount() {
+	document.getElementById("winCount").textContent = "Wins: " + wins;
+}
 
 // runs when game over
 function gameOver() {
-	// creates message element for game over.
+	// increments how many time the player has won
+	if (!hasWon) {
+		losses++;
+		displayLoseCount();
+		console.log("Game losses runs!"); // Test
+	}
+
 	let gameOverMsg = document.createElement("h2");
+	// creates message element for game over.
 	gameOverMsg.setAttribute("id", "endGameMsg");
 	msgHolderEl.appendChild(gameOverMsg);
 	gameOverMsg.textContent = "Game Over, loser!!!";
@@ -299,8 +297,9 @@ function gameOver() {
 
 	//update img of hangedBear
 	hangmanImg.src = "images/h6.png";
-	console.log("Game Over, loser!!!"); //test
+	console.log("Game lost!"); //test
 }
+
 //reveal the full correct word when losing by getting all ctreated letterboxes inputs.
 function revealWord() {
 	const letterBoxInputs = letterBoxEls.getElementsByTagName("input");
@@ -311,6 +310,14 @@ function revealWord() {
 
 //runs when gameWinner (the player is winning)
 function gameWinner() {
+	// increments how many time the player has won
+	if (!hasWon) {
+		wins++;
+		displayWinCount();
+		hasWon = true;
+		console.log("Game won!"); // Test
+	}
+	let gameWinnerMsg = document.createElement("h2");
 	const allInputs = document.querySelectorAll("#letterBoxes input");
 	let guessedWord = "";
 	allInputs.forEach((input) => {
@@ -327,7 +334,6 @@ function gameWinner() {
 		winnerBear.style.display = "";
 
 		//create WinnerBear Image
-		let gameWinnerMsg = document.createElement("h2");
 		gameWinnerMsg.setAttribute("id", "endGameMsg");
 		msgHolderEl.appendChild(gameWinnerMsg);
 		gameWinnerMsg.textContent = "Congratulations! \n You won!!";
@@ -338,7 +344,10 @@ function gameWinner() {
 		instructions.style.display = "none";
 		msgHolderEl.style.display = "";
 
-		console.log("WINNER!"); //test
+		//acts like a break for not reading winner twice
+		hasWon = true;
+
+		console.log("Game won!"); //test
 	}
 }
 
@@ -356,41 +365,21 @@ function restartGame() {
 	// Remove old letter boxes
 	const letterBoxesContainer = document.querySelector("#letterBoxes > ul");
 	letterBoxesContainer.innerHTML = ""; // Clear content
+	//removes endGameMsg
 	msgHolderEl.removeChild(document.getElementById("endGameMsg")); // removes message(h2-node) from msgholderEl from the DOM to clear for next game-round.
 
-	resetButtons();
+	//calls functions necessary for restarting game, Generate a new word/create letterboxes/ reset Buttons
 	startGame();
 }
 
 //reseting buttons in game to be able play again.
-/* function resetButtons() {
-   console.log('Resetting buttons');
-   const letterButtons = document.querySelectorAll('#letterButtons button');
-  
-   //remove listeners
-   letterButtons.forEach(button => {
-      const newButton = button.cloneNode(true);
-      button.parentNode.replaceChild(newButton, button);
-   });
-//add new listener
-   letterButtons.forEach(button => {
-      button.disabled = false;
-      button.style.border = '';
-      button.style.color = '';
-      button.addEventListener('click', handleButtonClick);
-   }); */
 function resetButtons() {
-	console.log("ResetButtons running");
+	console.log("Resetting buttons");
 	const letterButtons = document.querySelectorAll("#letterButtons button");
-
 	letterButtons.forEach((button) => {
-		// Remove existing event listeners
-		button.removeEventListener("click", handleButtonClick);
 		button.disabled = false;
 		button.style.border = "";
 		button.style.color = "";
-
-		// Add a new event listener
-		button.addEventListener("click", handleButtonClick);
+		button.removeEventListener("click", handleButtonClick);
 	});
 }
