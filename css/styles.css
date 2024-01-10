@@ -17,14 +17,8 @@ font-family: 'Rubik Mono One', sans-serif;
   --pink: #ff94e1;
   --lilac: #8077ff;
   --ultraviolet: #6a00ff;
-  --mint: #75ffb5;
   --apple: #00ff95;
   --cherry: #ff0037;
-  --periwinkle: #7b9ff5;
-  --body: #6aa4ff;
-  --largeText: #b7ffdc;
-  --clickedBorder: #ff0000;
-  --yellow:#ffff39;
 }
 
 /* Base styles for up to 770*/ 
@@ -36,7 +30,7 @@ font-family: 'Rubik Mono One', sans-serif;
 }
 
 body {
-  background-color: var(--body);
+  background-color: #6aa4ff;
   color: white;
   font-family: sans-serif;
   display: -webkit-box;
@@ -408,9 +402,10 @@ img {
   border-radius: 5px;
 }
 
-#message h2 {
-  margin:1rem;
+h2#endGameMsg {
+  padding-top: 1rem;
   text-align: center;
+  font-size: 3vmax;
 }
 /*------------------------------ DESKTOP ------------------------------*/
 
@@ -463,6 +458,7 @@ h1 {
       max-height: 120px;
       max-width: 250px;
   }
+
 
   #hangman, #winnerBear {
     max-width: 350px;
